@@ -1,0 +1,126 @@
+.post-card {
+  background-color: var(--grey-1);
+  width: 100%;
+  margin-bottom: 1.68rem;
+}
+
+.post-card-header {
+  display: flex;
+  padding: 0.625rem 1.25rem;
+  padding-bottom: 0;
+}
+
+.post-card-header img {
+  height: 30px;
+  width: 30px;
+}
+
+.post-card-header .name {
+  font-family: var(--font-1);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 22px;
+  color: var(--grey-8);
+  margin-right: 0.5rem;
+}
+
+.post-card-header .time {
+  font-family: var(--font-1);
+  font-style: normal;
+  font-weight: 500;
+  color: var(--grey-8);
+  font-size: 10px;
+  line-height: 160%;
+  letter-spacing: 0.05em;
+  color: #98a2b3;
+}
+
+.post-card-header .tag {
+  font-family: var(--font-1);
+  font-style: normal;
+  font-weight: 500;
+  color: var(--grey-8);
+  font-size: 12px;
+  line-height: 167%;
+  letter-spacing: 0.05em;
+  color: #98a2b3;
+}
+
+.post-card-caption {
+  font-family: var(--font-2);
+  padding: 1rem 1.25rem;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 157%;
+  color: var(--grey-8);
+}
+
+.post-card-media {
+  background-color: var(--grey-2);
+  position: relative;
+  height: 100vw;
+  max-height: 400px;
+  width: 100vw;
+  max-width: 400px;
+}
+
+.post-card-media video {
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+.post-card-media span {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+}
+
+.post-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.125rem;
+  width: 100%;
+}
+
+.post-btn {
+  color: var(--grey-7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3125rem 1rem;
+  border: 0.75px var(--grey-7) solid;
+  border-radius: 1rem;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 183%;
+  text-align: right;
+}
+
+.post-btn .upvote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-btn-text {
+  margin-right: 0.5rem;
+}
+
+.vote .footer-btn-text {
+  margin: 0;
+}
+
+.vote svg:nth-child(1) {
+  margin-right: 0.5rem;
+  margin-left: 0.25rem;
+}
+
+.post-btn .pipe {
+  margin: 0 0.5rem;
+}

@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
+@font-face {
+  font-family: NeueMachina;
+  src: url("./src/assets/fonts/NeueMachina-Light.otf");
+  font-weight: thin;
+}
+@font-face {
+  font-family: NeueMachina;
+  src: url("./src/assets/fonts/NeueMachina-Regular.otf");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: NeueMachina;
+  src: url("./src/assets/fonts/NeueMachina-Ultrabold.otf");
+  font-weight: bold;
+}
+
+:root {
+  --font-1: "Space Grotesk", sans-serif;
+  --font-2: "NeueMachina", sans-serif;
+
+  --primary-color-3: #3C008F;
+  --grey-1: #ffffff;
+  --grey-2: #F9F9FB;
+  --grey-3: #F4F8FB;
+  --grey-4: #F1F2F4;
+  --grey-5: #E4E7EC;
+  --grey-6: #98A2B3;
+  --grey-7: #999999;
+  --grey-8: #292A31;
+  --grey-9: #000000;
+
+}

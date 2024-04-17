@@ -1,0 +1,177 @@
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+} */
+
+* {
+  box-sizing: border-box;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  font-family: var(--font-1);
+  text-decoration: none;
+  /* outline: 2px solid pink; */
+}
+
+html {
+  background: var(--grey-2);
+  font-size: 16px;
+  scroll-behavior: smooth;
+  
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+  font-size: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+#fab {
+  position: fixed;
+  top: calc(100vh - 6rem);
+  right: 1.125rem;
+  z-index: 5;
+}
+
+#posts {
+  margin-top: 7.5rem;
+  padding-bottom: 3rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Header                                                                     */
+/* -------------------------------------------------------------------------- */
+
+header {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 1.25rem;
+  background: var(--grey-1);
+  top: 0;
+  z-index: 1;
+}
+
+/* -------------------------------------------------------------------------- */
+/* spalsh                                                                     */
+/* -------------------------------------------------------------------------- */
+
+.tp-spalsh {
+  margin: 2.5rem;
+  margin-bottom: 4rem;
+}
+
+#splash-cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  height: calc(100vh - 4rem);
+}
+
+#splash-cont img {
+  width: 100%;
+  margin-bottom: 3.5rem;
+  margin-top: 3.5rem;
+}
+
+#splash-cont h2 {
+  font-family: var(--font-1);
+  width: 100%;
+  text-align: center;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 121%;
+  margin-bottom: 1rem;
+}
+
+#splash-cont p {
+  width: 100%;
+  text-align: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 138%;
+}
+
+.bt-splash button {
+  margin-bottom: 1.75rem;
+}
+
+.bt-splash span {
+  font-family: var(--font-1);
+  font-style: normal;
+  /* font-weight: 800; */
+  font-size: 0.75rem;
+  line-height: 158%;
+  text-align: center;
+}
+
+/* -------------------------------------------------------------------------- */
+/* filter bar                                                                     */
+/* -------------------------------------------------------------------------- */
+
+#filter-bar {
+  position: fixed;
+  top: 66px;
+  background-color: var(--grey-1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 1.125rem;
+  border: 2px var(--grey-2) solid;
+  border-left: 0;
+  width: 100%;
+  max-width: 400px;
+  z-index: 1;
+}
+
+#filter-bar .fb-l {
+  display: flex;
+  align-items: center;
+}
+
+#filter-bar .fb-l div {
+  display: flex;
+  align-items: center;
+}
+
+#filter-bar .fb-l-title {
+  margin-right: 0.5rem;
+  height: 22px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 183%;
+  color: #292a31;
+}
+
+/* -------------------------------------------------------------------------- */
+/* create post                                                                   */
+/* -------------------------------------------------------------------------- */
+
+.back-btn {
+  margin: 1.125rem;
+}
+
+.page-title {
+  padding: 0.5rem 1.25rem;
+  font-family: var(--font-2);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 26px;
+  color: #000000;
+}
+
+@media only screen and (max-width: 600px) {
+}
