@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 
-axios.defaults.baseURL = "http://localhost:6900";
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_BASE_URL;
 axios.defaults.withCredentials = true;
 
 axios.interceptors.response.use(

@@ -28,7 +28,7 @@ export default function CreatePostPage() {
       return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     const formData = new FormData();
     formData.append("media", selectedFile);
@@ -39,12 +39,14 @@ export default function CreatePostPage() {
     try {
       const response = await PostService.create(formData);
 
-      toast.success("Post sent successfully")
-      setIsSubmitting(false)
+      if (!response.data.success) throw new Error(response.data.message);
+
+      toast.success("Post sent successfully");
+      setIsSubmitting(false);
       router(-1);
     } catch (error) {
       console.error("Error uploading file:", error);
-      toast.error("Error uploading file. Please try again.")
+      toast.error("Error uploading file. Please try again.");
     }
   };
 
@@ -149,7 +151,9 @@ export default function CreatePostPage() {
             />
           </div>
 
-          <button type="submit" disabled={isSubmitting}>Submit</button>
+          <button type="submit" disabled={isSubmitting}>
+            Submit
+          </button>
         </form>
       </div>
     </div>

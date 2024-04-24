@@ -31,7 +31,7 @@ declare global {
   }
 
   interface HttpGetPosts {
-    docs: Post;
+    docs: Post[];
     meta: {
       page: number;
       limit: number;

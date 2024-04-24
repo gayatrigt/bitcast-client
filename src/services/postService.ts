@@ -4,8 +4,7 @@ import httpService from "./httpService";
 const route = `/post`;
 
 export default class PostService {
-  static async create(newPost) {
-    console.log(newPost);
+  static async create(newPost: Post) {
     return await axios({
       method: "post",
       url: route,

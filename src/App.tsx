@@ -17,7 +17,6 @@ function App() {
         </Routes>
       <Toaster position="top-center" duration={5000} richColors toastOptions={{
     style: {
-
       padding: '1rem'
     },
     className: 'class',

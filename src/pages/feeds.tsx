@@ -12,7 +12,7 @@ export default function FeedsPage() {
   const [openSortDrawer, setSortDrawer] = useState(false);
   const { authUser } = useAppContext();
 
-  const serverurl = "http://localhost:6900/";
+  const serverurl = import.meta.env.VITE_BACKEND_BASE_URL;
 
   const getPosts = async () => {
     const posts = (await PostService.getMany()).data.data.docs;

@@ -58,14 +58,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const ethereum = window.ethereum;
 
-  ethereum.on("accountsChanged", (x) => {
+  ethereum.on("accountsChanged", (x: string[]) => {
     setAuthUser(null);
     httpService.deleteAuthUser();
     if (x[0]) toast.info(`Account switched to ${shortenName(x[0])}`);
     console.log("changed", x[0]);
   });
 
-  ethereum.on("connect", (x) => {
+  ethereum.on("connect", (x: unknown) => {
     console.log(x);
     toast.info(`Account connected`);
   });
