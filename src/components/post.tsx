@@ -36,28 +36,31 @@ export default function Post({
   const [openShareDrawer, setOpenShareDrawer] = useState<boolean>(false);
   const { authUser, signMessage } = useAppContext();
 
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [, setIsPlaying] = useState(true);
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
-    videoRef.current.muted = !videoRef.current.muted;
+    if (videoRef.current) videoRef.current.muted = !videoRef.current.muted;
   };
 
   const togglePlay = () => {
-    if (videoRef.current.paused || videoRef.current.ended) {
+    if (
+      videoRef.current &&
+      (videoRef.current.paused || videoRef.current.ended)
+    ) {
       videoRef.current.play();
       setIsPlaying(true);
     } else {
-      videoRef.current.pause();
+      if (videoRef.current) videoRef.current.pause();
       setIsPlaying(false);
     }
   };
 
   const upvote = async (id: string) => {
     if (!authUser) {
-      return signMessage()
+      return signMessage();
     }
     setisUpvoted(true);
     setisDownvoted(false);
@@ -67,7 +70,7 @@ export default function Post({
 
   const downvote = async (id: string) => {
     if (!authUser) {
-      return signMessage()
+      return signMessage();
     }
     setisDownvoted(true);
     setisUpvoted(false);
@@ -77,7 +80,7 @@ export default function Post({
 
   const unvote = async (id: string) => {
     if (!authUser) {
-      return signMessage()
+      return signMessage();
     }
     setisUpvoted(false);
     setisDownvoted(false);
@@ -86,7 +89,7 @@ export default function Post({
   };
 
   const timeSince = (date: Date) => {
-    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    const seconds = Math.floor((Number(new Date()) - Number(new Date(date))) / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
@@ -103,16 +106,18 @@ export default function Post({
   useEffect(() => {
     const video = videoRef.current;
 
-    const handleIntersect = (entries, observer) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+    const handleIntersect = (entries: any[], _observer: unknown) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           // Play video when it enters the viewport
-          video.play().catch((error) => {
-            console.error("Error playing video:", error);
-          });
+          if (video)
+            video.play().catch((error) => {
+              console.error("Error playing video:", error);
+            });
         } else {
           // Pause video when it exits the viewport
-          video.pause();
+          if (video) video.pause();
         }
       });
     };
@@ -120,11 +125,11 @@ export default function Post({
     // Create an Intersection Observer
     const observer = new IntersectionObserver(handleIntersect, {
       root: null, // Use the viewport as the root
-      threshold: 0.5, // Trigger when 50% of the video is visible
+      threshold: 0.75, // Trigger when 75% of the video is visible
     });
 
     // Observe the video element
-    observer.observe(video);
+    if (video) observer.observe(video);
 
     // Cleanup
     return () => {
@@ -156,7 +161,6 @@ export default function Post({
               controls={false}
               onClick={togglePlay}
             >
-              {/* <source src={mediaUrl} type="video/mp4" /> */}
             </video>
             <span onClick={toggleMute}>
               <svg

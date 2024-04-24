@@ -12,8 +12,6 @@ export default function FeedsPage() {
   const [openSortDrawer, setSortDrawer] = useState(false);
   const { authUser } = useAppContext();
 
-  const serverurl = import.meta.env.VITE_BACKEND_BASE_URL;
-
   const getPosts = async () => {
     const posts = (await PostService.getMany()).data.data.docs;
     setPosts(posts);
@@ -106,31 +104,19 @@ export default function FeedsPage() {
 
       <main id="posts">
         {posts.map((data: Post) => {
-          const {
-            _id,
-            author_id,
-            topic_id,
-            caption,
-            created_at,
-            upvotes,
-            upvoted = false,
-            downvoted = false,
-            media_url,
-            tiktok,
-          } = data;
           return (
             <Post
-              key={_id}
-              id={_id}
-              address={author_id.address}
-              tag={topic_id.title}
-              caption={caption}
-              createdAt={created_at}
-              upvotes={upvotes}
-              upvoted={upvoted}
-              downvoted={downvoted}
-              tiktok={tiktok}
-              mediaUrl={serverurl + media_url}
+              key={data._id}
+              id={data._id}
+              address={data.author_id.address}
+              tag={data.topic_id.title}
+              caption={data.caption}
+              createdAt={data.created_at}
+              upvotes={data.upvotes}
+              upvoted={data.upvoted}
+              downvoted={data.downvoted}
+              tiktok={data.tiktok}
+              mediaUrl={data.media_url}
             />
           );
         })}

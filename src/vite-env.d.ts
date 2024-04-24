@@ -18,11 +18,11 @@ declare global {
   }
 
   interface Post {
-    _id?: string;
-    author_id?: IUser;
-    topic_id?: ITopic;
-    caption?: string;
-    created_at?: Date;
+    _id: string;
+    author_id: IUser;
+    topic_id: ITopic;
+    caption: string;
+    created_at: Date;
     upvotes: number;
     upvoted: boolean;
     downvoted: boolean;

@@ -48,7 +48,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setAuthUser(result.data.data);
       toast.success("Signin sucessfull");
     } catch (error) {
-      if (error.reason == "rejected") {
+      if (
+        typeof error === "object" &&
+        error &&
+        "reason" in error &&
+        error?.reason == "rejected"
+      ) {
         toast.error("Signature request was rejected");
       } else {
         toast.error("Something went wrong");
