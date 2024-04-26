@@ -13,7 +13,7 @@ export default function HeaderComponent() {
     <>
       <header>
         <div className="l">
-          <img src="./src/assets/img/Group 875582.png" alt="" />
+          <img src="https://bitcast.s3.eu-north-1.amazonaws.com/home.png" alt="" />
         </div>
         <div className="r" onClick={() => setOpenInfoDrawer(true)}>
           <svg

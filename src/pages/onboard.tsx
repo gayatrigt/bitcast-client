@@ -18,7 +18,7 @@ export default function OnboardPage() {
       <HeaderComponent />
       <div id="splash-cont">
         <div className="tp-splash">
-          <img src="./src/assets/img/image 43.png" alt="" />
+          <img src="https://bitcast.s3.eu-north-1.amazonaws.com/splash.png" alt="" />
           <h2>Welcome Bitcaster</h2>
           <p>
             Upload videos, accrue votes, and stand a chance to win $100, while
