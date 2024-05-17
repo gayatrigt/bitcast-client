@@ -157,6 +157,7 @@ export default function Post({
               ref={videoRef}
               src={mediaUrl}
               autoPlay
+              playsInline
               muted={isMuted}
               controls={false}
               onClick={togglePlay}
