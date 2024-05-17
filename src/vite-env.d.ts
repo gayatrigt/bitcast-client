@@ -19,8 +19,8 @@ declare global {
 
   interface Post {
     _id: string;
-    author_id: IUser;
-    topic_id: ITopic;
+    author: IUser;
+    topic: ITopic;
     caption: string;
     created_at: Date;
     upvotes: number;
@@ -49,5 +49,26 @@ declare global {
     message: string;
     code: number;
     data?: unknown;
+  }
+
+  enum PostQuerySortEnum {
+    REC = "rec",
+    TOP = "top",
+    RAND = "rand",
+  }
+
+  enum QuerySortOrderEnum {
+    ACS = "acs",
+    DESC = "desc",
+  }
+
+  interface PostQueryParams {
+    page: number;
+    limit: number;
+    sort: PostQuerySortEnum | null;
+    order: QuerySortOrderEnum | null;
+    since: string | null;
+    topic: string | null;
+    author: string | null;
   }
 }

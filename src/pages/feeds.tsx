@@ -6,15 +6,62 @@ import PostService from "../services/postService";
 import { Drawer } from "vaul";
 import { useAppContext } from "../app-context";
 
+enum PostQuerySortEnum {
+  REC = "rec",
+  TOP = "top",
+  RAND = "rand",
+}
+
+enum QuerySortOrderEnum {
+  ACS = "acs",
+  DESC = "desc",
+}
+
 export default function FeedsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [query, setQuery] = useState<PostQueryParams>({
+    page: 1,
+    limit: 20,
+    sort: PostQuerySortEnum.REC,
+    order: QuerySortOrderEnum.DESC,
+    since: null,
+    topic: null,
+    author: null,
+  });
   const [openFilterDrawer, setFilterDrawer] = useState(false);
   const [openSortDrawer, setSortDrawer] = useState(false);
+  const [filterTitle, setFilterTitle] = useState("Recent posts");
   const { authUser } = useAppContext();
+  
 
   const getPosts = async () => {
-    const posts = (await PostService.getMany()).data.data.docs;
+    const posts = (await PostService.getMany(query)).data.data.docs;
     setPosts(posts);
+  };
+
+  const updateQueryAndReloadPosts = async (data: Partial<PostQueryParams>) => {
+    const key = Object.keys(data)[0];
+    //@ts-ignore
+    query[key] = data[key];
+    setQuery(query);
+    await getPosts();
+
+    if(key == "sort"){
+      switch (data[key]) {
+        case "rec":
+          setFilterTitle("Recent posts")
+          break;
+        case "top":
+          setFilterTitle("Top posts")
+          break;
+        case "rand":
+          setFilterTitle("Random posts")
+          break;
+        default:
+          break;
+      }
+      
+    }
   };
 
   useEffect(() => {
@@ -53,7 +100,7 @@ export default function FeedsPage() {
 
       <div id="filter-bar">
         <div className="fb-l" onClick={() => setFilterDrawer(true)}>
-          <svg
+          {/* <svg
             width="25"
             height="25"
             viewBox="0 0 25 25"
@@ -64,9 +111,9 @@ export default function FeedsPage() {
               d="M8.28541 8.19671C7.80529 9.72517 7.78272 11.2481 8.22728 12.7754C8.2542 12.5601 8.24219 12.3433 8.25963 12.1271C8.34336 11.0893 8.74397 10.1885 9.40296 9.39167C9.74317 8.98033 10.0987 8.58017 10.3727 8.11785C10.7126 7.54447 10.8801 6.92023 10.9166 6.25976C10.9692 5.3101 10.787 4.39731 10.4663 3.50776C10.4355 3.42225 10.3923 3.33934 10.3858 3.24872C10.4326 3.22107 10.4588 3.25143 10.4857 3.26805C11.4908 3.88806 12.4322 4.59042 13.2513 5.44529C14.3109 6.55104 15.0952 7.81704 15.471 9.31631C15.6463 10.0159 15.7024 10.7256 15.6497 11.4677C15.7764 11.4017 15.8652 11.3176 15.9454 11.2237C16.3146 10.7911 16.4672 10.2761 16.5032 9.72121C16.5216 9.43851 16.5168 9.15462 16.4648 8.86369C16.5417 8.87001 16.5579 8.92186 16.5833 8.9573C17.1615 9.76191 17.7251 10.5764 18.1741 11.4624C18.7742 12.6462 19.1688 13.8874 19.2297 15.2257C19.3036 16.8484 18.7706 18.256 17.7546 19.4989C17.0674 20.3397 16.2352 21.0103 15.3083 21.568C15.2734 21.589 15.2335 21.64 15.1933 21.6046C15.1553 21.5712 15.1961 21.522 15.2088 21.4821C15.3887 20.9168 15.5645 20.3502 15.6381 19.7589C15.746 18.891 15.6441 18.0668 15.1158 17.3353C15.1101 17.3274 15.105 17.3188 15.0982 17.3118C15.0554 17.2677 15.0285 17.1809 14.9618 17.1959C14.9054 17.2086 14.9171 17.2958 14.9004 17.3498C14.6949 18.0117 14.2876 18.5022 13.6643 18.8092C13.6149 18.8336 13.556 18.8907 13.5048 18.8454C13.4609 18.8066 13.5077 18.7446 13.5215 18.6949C13.9355 17.198 13.813 15.7535 13.0834 14.375C12.6298 13.5179 11.9879 12.8265 11.1788 12.2913C11.1473 12.2705 11.1151 12.2308 11.0751 12.25C11.0342 12.2696 11.0618 12.3103 11.0687 12.3416C11.3501 13.6221 11.0251 14.7444 10.1918 15.7386C9.90548 16.0802 9.61915 16.4232 9.40194 16.8162C9.13919 17.2917 8.99452 17.8022 8.95979 18.3425C8.88733 19.4701 9.18926 20.505 9.74733 21.475C9.77089 21.516 9.81082 21.551 9.80667 21.6081C9.75174 21.6336 9.71328 21.5917 9.67359 21.5714C8.35461 20.8972 7.2341 19.9878 6.39113 18.7604C5.70463 17.7607 5.31102 16.6596 5.26402 15.4376C5.21254 14.0991 5.53607 12.8448 6.0792 11.6367C6.63161 10.4079 7.39576 9.31049 8.20122 8.23931C8.21563 8.22015 8.22816 8.19766 8.28541 8.19671Z"
               fill="black"
             />
-          </svg>
+          </svg> */}
           <div>
-            <span className="fb-l-title">Top Posts</span>
+            <span className="fb-l-title">{filterTitle}</span>
             <svg
               width="17"
               height="17"
@@ -108,8 +155,8 @@ export default function FeedsPage() {
             <Post
               key={data._id}
               id={data._id}
-              address={data.author_id.address}
-              tag={data.topic_id.title}
+              address={data.author.address}
+              tag={data.topic.title}
               caption={data.caption}
               createdAt={data.created_at}
               upvotes={data.upvotes}
@@ -159,7 +206,12 @@ export default function FeedsPage() {
               {/* <span className="drawer-title">Share</span> */}
             </Drawer.Title>
             <ul className="drawer-list">
-              <li className="drawer-listitem">
+              <li
+                className="drawer-listitem"
+                onClick={async () => {
+                  updateQueryAndReloadPosts({ sort: PostQuerySortEnum.REC });
+                }}
+              >
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -188,7 +240,12 @@ export default function FeedsPage() {
                 </span>
                 <span className="drawer-listitem-title">Recent</span>
               </li>
-              <li className="drawer-listitem">
+              <li
+                className="drawer-listitem"
+                onClick={async () => {
+                  updateQueryAndReloadPosts({ sort: PostQuerySortEnum.TOP });
+                }}
+              >
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -225,7 +282,12 @@ export default function FeedsPage() {
                 </span>
                 <span className="drawer-listitem-title">Top Posts</span>
               </li>
-              <li className="drawer-listitem">
+              <li
+                className="drawer-listitem"
+                onClick={async () => {
+                  updateQueryAndReloadPosts({ sort: PostQuerySortEnum.RAND });
+                }}
+              >
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -291,7 +353,9 @@ export default function FeedsPage() {
               </div>
             </Drawer.Title>
             <ul className="drawer-list">
-              <li className="drawer-listitem">
+              <li className="drawer-listitem" onClick={async () => {
+                  updateQueryAndReloadPosts({ since: "1h" });
+                }}>
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -320,7 +384,9 @@ export default function FeedsPage() {
                 </span>
                 <span className="drawer-listitem-title">Last 1h</span>
               </li>
-              <li className="drawer-listitem">
+              <li className="drawer-listitem" onClick={async () => {
+                  updateQueryAndReloadPosts({ since: "6h" });
+                }}>
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -349,7 +415,9 @@ export default function FeedsPage() {
                 </span>
                 <span className="drawer-listitem-title">Last 6h</span>
               </li>
-              <li className="drawer-listitem">
+              <li className="drawer-listitem" onClick={async () => {
+                  updateQueryAndReloadPosts({ since: "24h" });
+                }}>
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -378,7 +446,9 @@ export default function FeedsPage() {
                 </span>
                 <span className="drawer-listitem-title">Last 24h</span>
               </li>
-              <li className="drawer-listitem">
+              <li className="drawer-listitem" onClick={async () => {
+                  updateQueryAndReloadPosts({ since: "7d" });
+                }}>
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -406,6 +476,37 @@ export default function FeedsPage() {
                   </svg>
                 </span>
                 <span className="drawer-listitem-title">Last 7d</span>
+              </li>
+              <li className="drawer-listitem" onClick={async () => {
+                  updateQueryAndReloadPosts({ since: null });
+                }}>
+                <span className="drawer-listitem-icon">
+                  <svg
+                    width="39"
+                    height="39"
+                    viewBox="0 0 39 39"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      x="0.407837"
+                      y="0.234253"
+                      width="38"
+                      height="38"
+                      rx="19"
+                      fill="#F4F8FB"
+                    />
+                    <path
+                      d="M19.2026 10.7467C17.8157 10.7489 16.4534 11.1133 15.2506 11.8039C14.0478 12.4944 13.0462 13.4871 12.345 14.6838V13.167C12.345 12.9531 12.26 12.7479 12.1087 12.5966C11.9574 12.4453 11.7522 12.3603 11.5382 12.3603C11.3243 12.3603 11.119 12.4453 10.9677 12.5966C10.8164 12.7479 10.7314 12.9531 10.7314 13.167V16.3941C10.7314 16.6081 10.8164 16.8133 10.9677 16.9646C11.119 17.1159 11.3243 17.2009 11.5382 17.2009H15.1687C15.3827 17.2009 15.5879 17.1159 15.7392 16.9646C15.8905 16.8133 15.9755 16.6081 15.9755 16.3941C15.9755 16.1802 15.8905 15.975 15.7392 15.8237C15.5879 15.6724 15.3827 15.5874 15.1687 15.5874H13.6842C14.2365 14.6095 15.0382 13.7956 16.0076 13.2287C16.9771 12.6617 18.0795 12.3621 19.2026 12.3603C20.3861 12.3586 21.5473 12.6824 22.5592 13.2962C23.5711 13.9101 24.3947 14.7903 24.94 15.8407C25.4853 16.8912 25.7313 18.0713 25.651 19.2521C25.5708 20.4329 25.1674 21.5689 24.485 22.5359C23.8026 23.5029 22.8674 24.2636 21.7818 24.7349C20.6961 25.2062 19.5018 25.3699 18.3294 25.2081C17.1569 25.0463 16.0516 24.5652 15.1342 23.8175C14.2167 23.0698 13.5226 22.0842 13.1276 20.9685C13.057 20.7663 12.9089 20.6005 12.716 20.5074C12.5231 20.4144 12.3011 20.4018 12.0989 20.4724C11.8967 20.543 11.7309 20.691 11.6378 20.8839C11.5448 21.0768 11.5322 21.2988 11.6028 21.501C12.0954 22.8961 12.9623 24.1288 14.1084 25.0644C15.2546 26 16.6359 26.6024 18.1014 26.8057C19.5669 27.009 21.0601 26.8054 22.4176 26.2172C23.7752 25.6289 24.9448 24.6787 25.7987 23.4705C26.6525 22.2622 27.1577 20.8424 27.2589 19.3664C27.3601 17.8903 27.0535 16.4149 26.3726 15.1014C25.6916 13.7878 24.6626 12.6869 23.3981 11.9189C22.1335 11.1508 20.6821 10.7453 19.2026 10.7467Z"
+                      fill="black"
+                    />
+                    <path
+                      d="M22.228 22.0416C22.0534 22.0416 21.8836 21.9849 21.7439 21.8802L18.5168 19.4599C18.4166 19.3847 18.3353 19.2873 18.2793 19.1753C18.2233 19.0632 18.1941 18.9397 18.1941 18.8145V15.5874C18.1941 15.3734 18.2791 15.1682 18.4304 15.0169C18.5817 14.8656 18.7869 14.7806 19.0009 14.7806C19.2148 14.7806 19.42 14.8656 19.5713 15.0169C19.7226 15.1682 19.8076 15.3734 19.8076 15.5874V18.4111L22.712 20.5894C22.7968 20.6529 22.8682 20.7326 22.9222 20.8237C22.9762 20.9149 23.0117 21.0158 23.0266 21.1207C23.0416 21.2256 23.0358 21.3324 23.0095 21.435C22.9832 21.5376 22.937 21.6341 22.8734 21.7188C22.7982 21.819 22.7008 21.9004 22.5888 21.9564C22.4767 22.0124 22.3532 22.0416 22.228 22.0416Z"
+                      fill="black"
+                    />
+                  </svg>
+                </span>
+                <span className="drawer-listitem-title">All time</span>
               </li>
             </ul>
           </Drawer.Content>

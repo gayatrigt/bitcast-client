@@ -16,24 +16,22 @@ export default class PostService {
   }
 
   static async getMany({
-    limit = 15,
     page = 1,
+    limit = 15,
     sort,
+    order,
     since,
     topic,
-  }: {
-    limit?: number;
-    page?: number;
-    sort?: string;
-    since?: string;
-    topic?: string;
-  } = {}) {
+    author,
+  }: PostQueryParams) {
     let url = `${route}?`;
-    url += limit ? `limit=${limit}&` : "";
     url += page ? `page=${page}&` : "";
+    url += limit ? `limit=${limit}&` : "";
     url += sort ? `sort=${sort}&` : "";
     url += since ? `since=${since}&` : "";
     url += topic ? `topic=${topic}&` : "";
+    url += order ? `order=${order}&` : "";
+    url += author ? `author=${author}&` : "";
 
     return await httpService.get<{ message: string; data: HttpGetPosts }>(url);
   }
