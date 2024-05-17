@@ -95,6 +95,7 @@ export default function CreatePostPage() {
               name="topic"
               required
               onChange={(e) => setTopic(e.target.value)}
+              placeholder="e.g #Bitcoin"
             />
           </div>
 
