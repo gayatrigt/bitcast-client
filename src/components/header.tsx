@@ -2,7 +2,7 @@ import { Drawer } from "vaul";
 import ProfileIcon from "./profile-icon";
 import { useState } from "react";
 import { useAppContext } from "../app-context";
-import { shortenName } from "../services/httpService";
+import { shortenAddress } from "../services/httpService";
 
 export default function HeaderComponent() {
   const [openInfoDrawer, setOpenInfoDrawer] = useState<boolean>(false);
@@ -118,7 +118,7 @@ export default function HeaderComponent() {
                     />
                   </span>
                   <span className="drawer-listitem-title">
-                    {shortenName(authUser.address)}
+                    {shortenAddress(authUser.address)}
                   </span>
                 </li>
               )}

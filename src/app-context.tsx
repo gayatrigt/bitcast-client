@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import AuthService from "./services/authService";
-import httpService, { getAuthUser, shortenName } from "./services/httpService";
+import httpService, { getAuthUser, shortenAddress } from "./services/httpService";
 import { toast } from "sonner";
 
 type appContextType = {
@@ -66,12 +66,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   ethereum.on("accountsChanged", (x: string[]) => {
     setAuthUser(null);
     httpService.deleteAuthUser();
-    if (x[0]) toast.info(`Account switched to ${shortenName(x[0])}`);
-    console.log("changed", x[0]);
+    if (x[0]) toast.info(`Account switched to ${shortenAddress(x[0])}`);
   });
 
-  ethereum.on("connect", (x: unknown) => {
-    console.log(x);
+  ethereum.removeListener("accountsChanged", () => { });
+
+  ethereum.on("connect", () => {
     toast.info(`Account connected`);
   });
 
@@ -79,7 +79,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setAuthUser(null);
     httpService.deleteAuthUser();
     toast.info("Wallet disconnected");
-    console.log("disconnect");
   });
 
   return (

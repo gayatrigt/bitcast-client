@@ -15,12 +15,17 @@ function App() {
           <Route path="/feeds" Component={FeedsPage} />
           <Route path="/create-post" Component={CreatePostPage} />
         </Routes>
-      <Toaster position="top-center" duration={5000} richColors toastOptions={{
-    style: {
-      padding: '1rem'
-    },
-    className: 'class',
-  }} />
+        <Toaster
+          position="top-center"
+          visibleToasts={1}
+          duration={5000}
+          richColors
+          toastOptions={{
+            style: {
+              padding: "1rem",
+            },
+          }}
+        />
       </AppProvider>
     </BrowserRouter>
   );

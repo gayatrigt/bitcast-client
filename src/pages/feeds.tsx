@@ -41,6 +41,7 @@ export default function FeedsPage() {
 
   const updateQueryAndReloadPosts = async (data: Partial<PostQueryParams>) => {
     const key = Object.keys(data)[0];
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     query[key] = data[key];
     setQuery(query);

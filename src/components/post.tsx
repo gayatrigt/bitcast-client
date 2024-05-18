@@ -3,7 +3,7 @@ import PostService from "../services/postService";
 import ProfileIcon from "./profile-icon";
 import { Drawer } from "vaul";
 import { useAppContext } from "../app-context";
-import { shortenName } from "../services/httpService";
+import { shortenAddress } from "../services/httpService";
 
 interface PostProps {
   id: string;
@@ -145,7 +145,7 @@ export default function Post({
             <ProfileIcon username={address} width="150" height="150" />
             <div>
               <div>
-                <span className="name">{shortenName(address)}</span>
+                <span className="name">{shortenAddress(address)}</span>
                 <span className="time">{timeSince(createdAt)}</span>
               </div>
               <span className="tag">in #{tag}</span>
