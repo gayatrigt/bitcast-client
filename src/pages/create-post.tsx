@@ -47,13 +47,22 @@ export default function CreatePostPage() {
     formData.append("tiktok", tiktok);
 
     try {
-      const response = await PostService.create(formData);
+      const createPost = PostService.create(formData);
 
-      if (!response.data.success) throw new Error(response.data.message);
+      toast.promise(createPost, {
+        loading: "Uploading post...",
+        success: () => {
+          setIsSubmitting(false);
+          router(-1);
+          return `Post has been uploaded`;
+        },
+        error: (res) => {
+          throw new Error(res.data.message);
+        },
+      });
 
-      toast.success("Post sent successfully");
-      setIsSubmitting(false);
-      router(-1);
+      // if (!response.data.success) throw new Error(response.data.message);
+      // toast.success("Post sent successfully");
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("Error uploading file. Please try again.");
@@ -127,7 +136,9 @@ export default function CreatePostPage() {
 
               <span>{fileName}</span>
 
-              <label htmlFor="media" className="upload-btn">Choose file</label>
+              <label htmlFor="media" className="upload-btn">
+                Choose file
+              </label>
             </div>
             <input
               ref={actualBtnRef}
