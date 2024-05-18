@@ -7,14 +7,14 @@ axios.defaults.withCredentials = true;
 axios.interceptors.response.use(
   undefined,
   (error: AxiosError<{ message: string }>) => {
-    const expectedError =
-      error.response &&
-      error.response.status >= 400 &&
-      error.response.status < 500;
-
     const message: string = error.response?.data?.message || error.message;
-
-    if (!expectedError) toast.error("An unexpected error occurred.");
+    
+    if (error.response && error.response.status == 401) {
+      deleteAuthUser();
+      toast.error("Please reconnect your wallet an try again");
+    }
+    if (error.response && error.response.status == 500)
+      toast.error("An unexpected error occurred.");
     else toast.error(message);
 
     return Promise.reject(error);
@@ -40,7 +40,7 @@ export function deleteAuthUser() {
   localStorage.removeItem("auth-user");
 }
 
-export const shortenName = (addr: string) => {
+export const shortenAddress = (addr: string) => {
   return `${addr.slice(0, 7)}...${addr.slice(
     addr.length - 6,
     addr.length - 1
@@ -56,7 +56,7 @@ const httpService = {
   setAuthUser,
   getAuthUser,
   deleteAuthUser,
-  shortenName
+  shortenAddress,
 };
 
 export default httpService;
