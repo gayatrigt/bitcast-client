@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import HeaderComponent from "../components/header";
 import Post from "../components/post";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PostService from "../services/postService";
 import { Drawer } from "vaul";
 import { useAppContext } from "../app-context";
+import { RotatingLines } from "react-loader-spinner";
 
 enum PostQuerySortEnum {
   REC = "rec",
@@ -19,6 +20,7 @@ enum QuerySortOrderEnum {
 
 export default function FeedsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [query, setQuery] = useState<PostQueryParams>({
     page: 1,
     limit: 20,
@@ -32,10 +34,13 @@ export default function FeedsPage() {
   const [openSortDrawer, setSortDrawer] = useState(false);
   const [filterTitle, setFilterTitle] = useState("Recent posts");
   const { authUser } = useAppContext();
-  
+  // const postsRef = React.useRef<HTMLInputElement>(null);
 
   const getPosts = async () => {
+    setLoading(true);
     const posts = (await PostService.getMany(query)).data.data.docs;
+    setLoading(false);
+    scrollToTop();
     setPosts(posts);
   };
 
@@ -45,24 +50,30 @@ export default function FeedsPage() {
     //@ts-ignore
     query[key] = data[key];
     setQuery(query);
+    setFilterDrawer(false);
+    setSortDrawer(false);
     await getPosts();
 
-    if(key == "sort"){
+    if (key == "sort") {
       switch (data[key]) {
         case "rec":
-          setFilterTitle("Recent posts")
+          setFilterTitle("Recent posts");
           break;
         case "top":
-          setFilterTitle("Top posts")
+          setFilterTitle("Top posts");
           break;
         case "rand":
-          setFilterTitle("Random posts")
+          setFilterTitle("Random posts");
           break;
         default:
           break;
       }
-      
     }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log("scrolled");
   };
 
   useEffect(() => {
@@ -70,8 +81,9 @@ export default function FeedsPage() {
       await getPosts();
     })();
   }, [authUser]);
+
   return (
-    <div>
+    <>
       <Link to="/create-post">
         <div id="fab">
           <svg
@@ -148,6 +160,25 @@ export default function FeedsPage() {
             />
           </svg>
         </div>
+      </div>
+
+      <div id="loader-container">
+        {loading && (
+          <div className="post-loader">
+            <RotatingLines
+              visible={true}
+              width="2rem"
+              strokeColor="grey"
+              strokeWidth="5"
+              animationDuration="0.75"
+              ariaLabel="rotating-lines-loading"
+            />
+          </div>
+        )}
+
+        {posts.length < 1 && !loading && (
+          <div className="no-post">No Posts</div>
+        )}
       </div>
 
       <main id="posts">
@@ -354,9 +385,12 @@ export default function FeedsPage() {
               </div>
             </Drawer.Title>
             <ul className="drawer-list">
-              <li className="drawer-listitem" onClick={async () => {
+              <li
+                className="drawer-listitem"
+                onClick={async () => {
                   updateQueryAndReloadPosts({ since: "1h" });
-                }}>
+                }}
+              >
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -385,9 +419,12 @@ export default function FeedsPage() {
                 </span>
                 <span className="drawer-listitem-title">Last 1h</span>
               </li>
-              <li className="drawer-listitem" onClick={async () => {
+              <li
+                className="drawer-listitem"
+                onClick={async () => {
                   updateQueryAndReloadPosts({ since: "6h" });
-                }}>
+                }}
+              >
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -416,9 +453,12 @@ export default function FeedsPage() {
                 </span>
                 <span className="drawer-listitem-title">Last 6h</span>
               </li>
-              <li className="drawer-listitem" onClick={async () => {
+              <li
+                className="drawer-listitem"
+                onClick={async () => {
                   updateQueryAndReloadPosts({ since: "24h" });
-                }}>
+                }}
+              >
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -447,9 +487,12 @@ export default function FeedsPage() {
                 </span>
                 <span className="drawer-listitem-title">Last 24h</span>
               </li>
-              <li className="drawer-listitem" onClick={async () => {
+              <li
+                className="drawer-listitem"
+                onClick={async () => {
                   updateQueryAndReloadPosts({ since: "7d" });
-                }}>
+                }}
+              >
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -478,9 +521,12 @@ export default function FeedsPage() {
                 </span>
                 <span className="drawer-listitem-title">Last 7d</span>
               </li>
-              <li className="drawer-listitem" onClick={async () => {
+              <li
+                className="drawer-listitem"
+                onClick={async () => {
                   updateQueryAndReloadPosts({ since: null });
-                }}>
+                }}
+              >
                 <span className="drawer-listitem-icon">
                   <svg
                     width="39"
@@ -514,6 +560,6 @@ export default function FeedsPage() {
           <Drawer.Overlay />
         </Drawer.Portal>
       </Drawer.Root>
-    </div>
+    </>
   );
 }
