@@ -6,7 +6,7 @@ import { shortenAddress } from "../services/httpService";
 
 export default function HeaderComponent() {
   const [openInfoDrawer, setOpenInfoDrawer] = useState<boolean>(false);
-  const { authUser, signMessage } = useAppContext();
+  const { authUser, signMessage, signout } = useAppContext();
 
   return (
     <>
@@ -120,6 +120,15 @@ export default function HeaderComponent() {
                   <span className="drawer-listitem-title">
                     {shortenAddress(authUser.address)}
                   </span>
+
+                  <button
+                    className="logout"
+                    onClick={() => {
+                      signout();
+                    }}
+                  >
+                    Logout
+                  </button>
                 </li>
               )}
 

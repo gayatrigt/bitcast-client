@@ -1,9 +1,8 @@
-/* #root {
-  max-width: 1280px;
+#root {
+  position: relative;
+  max-width: 400px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-} */
+}
 
 * {
   box-sizing: border-box;
@@ -58,6 +57,16 @@ header {
   background: var(--grey-1);
   top: 0;
   z-index: 1;
+}
+
+.logout{
+  background-color: white;
+  color: #d23245;
+  padding: 0.25rem 1rem;
+  width: fit-content;
+  margin-left: auto;
+  font-size: 12px;
+  border: 1px solid #d23245 ;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -171,6 +180,26 @@ header {
   font-size: 22px;
   line-height: 26px;
   color: #000000;
+}
+
+#loader-container{
+  margin-top: 8rem
+}
+
+.no-post{
+  margin: 0 auto;
+  padding-top: 6rem;
+  width: fit-content;
+  color: var(--grey-7);
+}
+
+.post-loader{
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 2rem;
+  width: 100%;
+  margin: 0 auto;
 }
 
 @media only screen and (max-width: 600px) {
