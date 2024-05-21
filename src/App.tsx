@@ -17,7 +17,7 @@ function App() {
         </Routes>
         <Toaster
           position="top-center"
-          visibleToasts={1}
+          visibleToasts={3}
           duration={5000}
           richColors
           toastOptions={{

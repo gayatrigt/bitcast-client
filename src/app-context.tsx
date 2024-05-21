@@ -1,32 +1,38 @@
 import { ethers } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import AuthService from "./services/authService";
-import httpService, { getAuthUser, shortenAddress } from "./services/httpService";
+import httpService, {
+  getAuthUser,
+  shortenAddress,
+} from "./services/httpService";
 import { toast } from "sonner";
 
 type appContextType = {
   authUser: AuthUser | null;
   setAuthUser: (formState: AuthUser | null) => void;
   signMessage: () => void;
+  signout: () => void;
 };
 
 const appContextDefaultValues: appContextType = {
   authUser: null,
   setAuthUser: () => null,
   signMessage: () => null,
+  signout: () => null,
 };
 
 const AppContext = createContext<appContextType>(appContextDefaultValues);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const ethereum = window.ethereum;
 
-  useEffect(() => {
-    (async () => {
-      const authUser = getAuthUser();
-      setAuthUser(authUser.access_token ? authUser : null);
-    })();
-  }, []);
+  const handleAccountsChanged = (accounts: string[]) => {
+    setAuthUser(null);
+    httpService.deleteAuthUser();
+    if (accounts[0])
+      toast.info(`Account switched to ${shortenAddress(accounts[0])}`);
+  };
 
   const signMessage = async () => {
     try {
@@ -61,28 +67,42 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const ethereum = window.ethereum;
-
-  ethereum.on("accountsChanged", (x: string[]) => {
+  const signout = () => {
     setAuthUser(null);
     httpService.deleteAuthUser();
-    if (x[0]) toast.info(`Account switched to ${shortenAddress(x[0])}`);
-  });
+  };
 
-  ethereum.removeListener("accountsChanged", () => { });
+  useEffect(() => {
+    (async () => {
+      console.log("USE EFFECT RUNNING");
+      const authUser = getAuthUser();
+      setAuthUser(authUser.access_token ? authUser : null);
 
-  ethereum.on("connect", () => {
-    toast.info(`Account connected`);
-  });
+      ethereum.on("accountsChanged", handleAccountsChanged);
 
-  ethereum.on("disconnect", () => {
-    setAuthUser(null);
-    httpService.deleteAuthUser();
-    toast.info("Wallet disconnected");
-  });
+      ethereum.on("connect", () => {
+        toast.info(`Account connected`);
+      });
+
+      ethereum.on("disconnect", () => {
+        setAuthUser(null);
+        httpService.deleteAuthUser();
+        toast.info("Wallet disconnected");
+      });
+    })();
+    
+    return () => {
+      console.log("REMOVING EVENT LISTENER");
+      ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      ethereum.removeListener("connect", () => {});
+      ethereum.removeListener("disconnect", () => {});
+    };
+  }, []);
 
   return (
-    <AppContext.Provider value={{ authUser, setAuthUser, signMessage }}>
+    <AppContext.Provider
+      value={{ authUser, setAuthUser, signMessage, signout }}
+    >
       {children}
     </AppContext.Provider>
   );
