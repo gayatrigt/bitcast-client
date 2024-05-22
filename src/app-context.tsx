@@ -74,7 +74,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      console.log("USE EFFECT RUNNING");
       const authUser = getAuthUser();
       setAuthUser(authUser.access_token ? authUser : null);
 
@@ -92,7 +91,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     })();
     
     return () => {
-      console.log("REMOVING EVENT LISTENER");
       ethereum.removeListener('accountsChanged', handleAccountsChanged);
       ethereum.removeListener("connect", () => {});
       ethereum.removeListener("disconnect", () => {});

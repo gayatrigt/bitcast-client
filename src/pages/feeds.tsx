@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import HeaderComponent from "../components/header";
 import Post from "../components/post";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PostService from "../services/postService";
 import { Drawer } from "vaul";
 import { useAppContext } from "../app-context";
@@ -39,9 +39,9 @@ export default function FeedsPage() {
   const getPosts = async () => {
     setLoading(true);
     const posts = (await PostService.getMany(query)).data.data.docs;
+    setPosts(posts);
     setLoading(false);
     scrollToTop();
-    setPosts(posts);
   };
 
   const updateQueryAndReloadPosts = async (data: Partial<PostQueryParams>) => {
@@ -72,8 +72,8 @@ export default function FeedsPage() {
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    console.log("scrolled");
+    // window.scrollTo({ top: 0, behavior: 'smooth' });
+     window.scrollTo(0,0);
   };
 
   useEffect(() => {
@@ -81,6 +81,12 @@ export default function FeedsPage() {
       await getPosts();
     })();
   }, [authUser]);
+
+  // useEffect(()=>{
+  //     // window.scrollTo(0,0);
+  //     // window.scrollTo({ top: 0, behavior: 'smooth' });
+  //     console.log(">>> SCROLL");
+  // }, [openFilterDrawer])
 
   return (
     <>
