@@ -34,14 +34,13 @@ export default function FeedsPage() {
   const [openSortDrawer, setSortDrawer] = useState(false);
   const [filterTitle, setFilterTitle] = useState("Recent posts");
   const { authUser } = useAppContext();
-  // const postsRef = React.useRef<HTMLInputElement>(null);
 
   const getPosts = async () => {
     setLoading(true);
     const posts = (await PostService.getMany(query)).data.data.docs;
     setPosts(posts);
     setLoading(false);
-    scrollToTop();
+    setTimeout(() => scrollToTop(), 0);
   };
 
   const updateQueryAndReloadPosts = async (data: Partial<PostQueryParams>) => {
@@ -72,8 +71,8 @@ export default function FeedsPage() {
   };
 
   const scrollToTop = () => {
-    // window.scrollTo({ top: 0, behavior: 'smooth' });
-     window.scrollTo(0,0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    //  window.scrollTo(0,0);
   };
 
   useEffect(() => {
@@ -81,12 +80,6 @@ export default function FeedsPage() {
       await getPosts();
     })();
   }, [authUser]);
-
-  // useEffect(()=>{
-  //     // window.scrollTo(0,0);
-  //     // window.scrollTo({ top: 0, behavior: 'smooth' });
-  //     console.log(">>> SCROLL");
-  // }, [openFilterDrawer])
 
   return (
     <>
@@ -119,18 +112,6 @@ export default function FeedsPage() {
 
       <div id="filter-bar">
         <div className="fb-l" onClick={() => setFilterDrawer(true)}>
-          {/* <svg
-            width="25"
-            height="25"
-            viewBox="0 0 25 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.28541 8.19671C7.80529 9.72517 7.78272 11.2481 8.22728 12.7754C8.2542 12.5601 8.24219 12.3433 8.25963 12.1271C8.34336 11.0893 8.74397 10.1885 9.40296 9.39167C9.74317 8.98033 10.0987 8.58017 10.3727 8.11785C10.7126 7.54447 10.8801 6.92023 10.9166 6.25976C10.9692 5.3101 10.787 4.39731 10.4663 3.50776C10.4355 3.42225 10.3923 3.33934 10.3858 3.24872C10.4326 3.22107 10.4588 3.25143 10.4857 3.26805C11.4908 3.88806 12.4322 4.59042 13.2513 5.44529C14.3109 6.55104 15.0952 7.81704 15.471 9.31631C15.6463 10.0159 15.7024 10.7256 15.6497 11.4677C15.7764 11.4017 15.8652 11.3176 15.9454 11.2237C16.3146 10.7911 16.4672 10.2761 16.5032 9.72121C16.5216 9.43851 16.5168 9.15462 16.4648 8.86369C16.5417 8.87001 16.5579 8.92186 16.5833 8.9573C17.1615 9.76191 17.7251 10.5764 18.1741 11.4624C18.7742 12.6462 19.1688 13.8874 19.2297 15.2257C19.3036 16.8484 18.7706 18.256 17.7546 19.4989C17.0674 20.3397 16.2352 21.0103 15.3083 21.568C15.2734 21.589 15.2335 21.64 15.1933 21.6046C15.1553 21.5712 15.1961 21.522 15.2088 21.4821C15.3887 20.9168 15.5645 20.3502 15.6381 19.7589C15.746 18.891 15.6441 18.0668 15.1158 17.3353C15.1101 17.3274 15.105 17.3188 15.0982 17.3118C15.0554 17.2677 15.0285 17.1809 14.9618 17.1959C14.9054 17.2086 14.9171 17.2958 14.9004 17.3498C14.6949 18.0117 14.2876 18.5022 13.6643 18.8092C13.6149 18.8336 13.556 18.8907 13.5048 18.8454C13.4609 18.8066 13.5077 18.7446 13.5215 18.6949C13.9355 17.198 13.813 15.7535 13.0834 14.375C12.6298 13.5179 11.9879 12.8265 11.1788 12.2913C11.1473 12.2705 11.1151 12.2308 11.0751 12.25C11.0342 12.2696 11.0618 12.3103 11.0687 12.3416C11.3501 13.6221 11.0251 14.7444 10.1918 15.7386C9.90548 16.0802 9.61915 16.4232 9.40194 16.8162C9.13919 17.2917 8.99452 17.8022 8.95979 18.3425C8.88733 19.4701 9.18926 20.505 9.74733 21.475C9.77089 21.516 9.81082 21.551 9.80667 21.6081C9.75174 21.6336 9.71328 21.5917 9.67359 21.5714C8.35461 20.8972 7.2341 19.9878 6.39113 18.7604C5.70463 17.7607 5.31102 16.6596 5.26402 15.4376C5.21254 14.0991 5.53607 12.8448 6.0792 11.6367C6.63161 10.4079 7.39576 9.31049 8.20122 8.23931C8.21563 8.22015 8.22816 8.19766 8.28541 8.19671Z"
-              fill="black"
-            />
-          </svg> */}
           <div>
             <span className="fb-l-title">{filterTitle}</span>
             <svg
@@ -207,7 +188,7 @@ export default function FeedsPage() {
         })}
       </main>
 
-      <Drawer.Root open={openFilterDrawer} shouldScaleBackground>
+      <Drawer.Root open={openFilterDrawer}>
         <Drawer.Portal>
           <Drawer.Overlay className="drawer-overlay" />
           <Drawer.Content className="drawer-cont">
@@ -240,8 +221,6 @@ export default function FeedsPage() {
                   />
                 </svg>
               </div>
-
-              {/* <span className="drawer-title">Share</span> */}
             </Drawer.Title>
             <ul className="drawer-list">
               <li
@@ -356,7 +335,7 @@ export default function FeedsPage() {
         </Drawer.Portal>
       </Drawer.Root>
 
-      <Drawer.Root open={openSortDrawer} shouldScaleBackground>
+      <Drawer.Root open={openSortDrawer}>
         <Drawer.Portal>
           <Drawer.Overlay className="drawer-overlay" />
           <Drawer.Content className="drawer-cont">
