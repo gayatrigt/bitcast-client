@@ -89,12 +89,23 @@ export default function Post({
   };
 
   const timeSince = (date: Date) => {
-    const seconds = Math.floor((Number(new Date()) - Number(new Date(date))) / 1000);
+    const seconds = Math.floor(
+      (Number(new Date()) - Number(new Date(date))) / 1000
+    );
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
+    const weeks = Math.floor(days / 7);
+    const months = Math.floor(weeks / 4);
+    const years = Math.floor(days / 365);
 
-    if (days > 0) {
+    if (years > 0) {
+      return `${years}yrs`;
+    } else if (months > 0) {
+      return `${months}mons`;
+    } else if (weeks > 0) {
+      return `${weeks}wks`;
+    } else if (days > 0) {
       return `${days}days`;
     } else if (hours > 0) {
       return `${hours}hrs`;
@@ -103,18 +114,28 @@ export default function Post({
     }
   };
 
+  const handleVideoEnd = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.currentTime = 0;
+      video.play();
+    }
+  };
+
   useEffect(() => {
     const video = videoRef.current;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     const handleIntersect = (entries: any[], _observer: unknown) => {
-      entries.forEach((entry) => {
+      entries.forEach(async (entry) => {
         if (entry.isIntersecting) {
           // Play video when it enters the viewport
           if (video)
-            video.play().catch((error) => {
-              console.error("Error playing video:", error);
-            });
+            try {
+              video.play();
+            } catch (error) {
+              console.log(error);
+            }
         } else {
           // Pause video when it exits the viewport
           if (video) video.pause();
@@ -156,13 +177,14 @@ export default function Post({
             <video
               ref={videoRef}
               src={mediaUrl}
+              onEnded={handleVideoEnd}
               autoPlay
               playsInline
               muted={isMuted}
               controls={false}
               onClick={togglePlay}
-            >
-            </video>
+            ></video>
+
             <span onClick={toggleMute}>
               <svg
                 width="30"
