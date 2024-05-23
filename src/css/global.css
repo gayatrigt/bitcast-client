@@ -203,5 +203,12 @@ header {
   margin: 0 auto;
 }
 
+.infinity-loader{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 1rem auto;
+}
+
 @media only screen and (max-width: 600px) {
 }

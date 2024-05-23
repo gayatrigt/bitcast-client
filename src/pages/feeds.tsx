@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import HeaderComponent from "../components/header";
 import Post from "../components/post";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PostService from "../services/postService";
 import { Drawer } from "vaul";
 import { useAppContext } from "../app-context";
 import { RotatingLines } from "react-loader-spinner";
+import { toast } from "sonner";
 
 enum PostQuerySortEnum {
   REC = "rec",
@@ -21,9 +22,11 @@ enum QuerySortOrderEnum {
 export default function FeedsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true);
   const [query, setQuery] = useState<PostQueryParams>({
     page: 1,
-    limit: 20,
+    limit: 10,
     sort: PostQuerySortEnum.REC,
     order: QuerySortOrderEnum.DESC,
     since: null,
@@ -34,11 +37,13 @@ export default function FeedsPage() {
   const [openSortDrawer, setSortDrawer] = useState(false);
   const [filterTitle, setFilterTitle] = useState("Recent posts");
   const { authUser } = useAppContext();
+  const lockInfinityLoad = useRef(false);
 
-  const getPosts = async () => {
+  const getPosts = async (_query?: PostQueryParams) => {
     setLoading(true);
-    const posts = (await PostService.getMany(query)).data.data.docs;
+    const posts = (await PostService.getMany(_query || query)).data.data.docs;
     setPosts(posts);
+    setHasMoreData(true)
     setLoading(false);
     setTimeout(() => scrollToTop(), 0);
   };
@@ -48,10 +53,12 @@ export default function FeedsPage() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     query[key] = data[key];
+    query.page = 1;
     setQuery(query);
+    setPage(1)
     setFilterDrawer(false);
     setSortDrawer(false);
-    await getPosts();
+    await getPosts(query);
 
     if (key == "sort") {
       switch (data[key]) {
@@ -80,6 +87,49 @@ export default function FeedsPage() {
       await getPosts();
     })();
   }, [authUser]);
+
+  useEffect(() => {
+    lockInfinityLoad.current = true;
+    const infinityGetPost = async () => {
+      if (!hasMoreData || page < 2) {
+        lockInfinityLoad.current = false;
+        return;
+      } // Prevent unnecessary fetches
+
+      setLoading(true);
+      try {
+        query.page = page;
+        const posts = (await PostService.getMany(query)).data.data.docs;
+        setPosts((prevPosts) => [...prevPosts, ...posts]); // Append new data
+        setHasMoreData(posts.length > 0); // Update flag based on response
+      } catch (error) {
+        toast.error("Error fetching posts");
+      } finally {
+        lockInfinityLoad.current = false;
+        setLoading(false);
+      }
+    };
+    (async () => {
+      await infinityGetPost();
+    })();
+  }, [page]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >
+          document.documentElement.offsetHeight - 200 &&
+        !lockInfinityLoad.current
+      ) {
+        console.log("================", page)
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
@@ -187,6 +237,19 @@ export default function FeedsPage() {
           );
         })}
       </main>
+
+      {loading && (
+        <div className="infinity-loader">
+          <RotatingLines
+            visible={true}
+            width="2rem"
+            strokeColor="grey"
+            strokeWidth="5"
+            animationDuration="0.75"
+            ariaLabel="rotating-lines-loading"
+          />
+        </div>
+      )}
 
       <Drawer.Root open={openFilterDrawer}>
         <Drawer.Portal>

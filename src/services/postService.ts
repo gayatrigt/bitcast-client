@@ -16,8 +16,8 @@ export default class PostService {
   }
 
   static async getMany({
-    page = 1,
-    limit = 15,
+    page,
+    limit,
     sort,
     order,
     since,
@@ -32,6 +32,8 @@ export default class PostService {
     url += topic ? `topic=${topic}&` : "";
     url += order ? `order=${order}&` : "";
     url += author ? `author=${author}&` : "";
+
+    console.log({url})
 
     return await httpService.get<{ message: string; data: HttpGetPosts }>(url);
   }

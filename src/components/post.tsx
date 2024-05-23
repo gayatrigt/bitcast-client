@@ -132,7 +132,7 @@ export default function Post({
           // Play video when it enters the viewport
           if (video)
             try {
-              video.play();
+              await video.play();
             } catch (error) {
               console.log(error);
             }
