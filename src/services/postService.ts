@@ -33,8 +33,6 @@ export default class PostService {
     url += order ? `order=${order}&` : "";
     url += author ? `author=${author}&` : "";
 
-    console.log({url})
-
     return await httpService.get<{ message: string; data: HttpGetPosts }>(url);
   }
 

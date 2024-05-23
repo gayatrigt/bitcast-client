@@ -68,8 +68,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signout = () => {
-    setAuthUser(null);
     httpService.deleteAuthUser();
+    setAuthUser(null);
   };
 
   useEffect(() => {
