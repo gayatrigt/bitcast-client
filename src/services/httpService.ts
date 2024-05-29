@@ -8,14 +8,14 @@ axios.interceptors.response.use(
   undefined,
   (error: AxiosError<{ message: string }>) => {
     const message: string = error.response?.data?.message || error.message;
-    
     if (error.response && error.response.status == 401) {
       deleteAuthUser();
       toast.error("Please reconnect your wallet an try again");
-    }
-    if (error.response && error.response.status == 500)
+    } else if (error.response && error.response.status == 500)
       toast.error("An unexpected error occurred.");
-    else toast.error(message);
+    else {
+      toast.error(message);
+    }
 
     return Promise.reject(error);
   }

@@ -46,27 +46,21 @@ export default function CreatePostPage() {
     formData.append("caption", caption);
     formData.append("tiktok", tiktok);
 
-    try {
-      const createPost = PostService.create(formData);
+    const createPost = PostService.create(formData);
 
-      toast.promise(createPost, {
-        loading: "Uploading post...",
-        success: () => {
-          setIsSubmitting(false);
-          router(-1);
-          return `Post has been uploaded`;
-        },
-        error: (res) => {
-          throw new Error(res.data.message);
-        },
-      });
-
-      // if (!response.data.success) throw new Error(response.data.message);
-      // toast.success("Post sent successfully");
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      toast.error("Error uploading file. Please try again.");
-    }
+    toast.promise(createPost, {
+      loading: "Uploading post...",
+      success: () => {
+        router(-1);
+        return "Post has been uploaded";
+      },
+      error: (res) => {
+        return res.response.data.message;
+      },
+      finally: () => {
+        setIsSubmitting(false);
+      },
+    });
   };
 
   return (
