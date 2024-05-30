@@ -121,7 +121,6 @@ export default function FeedsPage() {
           document.documentElement.offsetHeight - 200 &&
         !lockInfinityLoad.current
       ) {
-        console.log("================", page)
         setPage((prevPage) => prevPage + 1);
       }
     };

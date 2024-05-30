@@ -37,6 +37,7 @@ export default function Post({
   const { authUser, signMessage } = useAppContext();
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [, setIsPlaying] = useState(true);
 
@@ -125,6 +126,26 @@ export default function Post({
   useEffect(() => {
     const video = videoRef.current;
 
+    const handleWaiting = () => setIsLoading(true);
+    const handlePlaying = () => setIsLoading(false);
+    const handleCanPlay = () => setIsLoading(false);
+    const handleCanPlayThrough = () => setIsLoading(false);
+    const handleLoadStart = () => setIsLoading(true);
+    const handleLoadedData = () => setIsLoading(false);
+    const handleLoadedMetadata = () => setIsLoading(false);
+    const handleError = () => setIsLoading(false);
+
+    if (video) {
+      video.addEventListener("waiting", handleWaiting);
+      video.addEventListener("playing", handlePlaying);
+      video.addEventListener("canplay", handleCanPlay);
+      video.addEventListener("canplaythrough", handleCanPlayThrough);
+      video.addEventListener("loadstart", handleLoadStart);
+      video.addEventListener("loadeddata", handleLoadedData);
+      video.addEventListener("loadedmetadata", handleLoadedMetadata);
+      video.addEventListener("error", handleError);
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     const handleIntersect = (entries: any[], _observer: unknown) => {
       entries.forEach(async (entry) => {
@@ -202,8 +223,8 @@ export default function Post({
                     fill="black"
                   />
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M20.6134 9.18056C20.8534 8.94064 21.2359 8.93923 21.485 9.17986C21.7271 9.4219 21.7271 9.81284 21.4857 10.0542L10.0532 21.486C9.93962 21.5996 9.77589 21.6667 9.61639 21.6667C9.46042 21.6667 9.30656 21.6032 9.18235 21.4881C8.93957 21.2362 8.93957 20.853 9.18023 20.6124L11.0646 18.7283H11.0455C10.1062 18.7283 9.42231 18.0649 9.29527 17.0347C9.15341 16.0044 9.18164 14.2402 9.29527 13.3017C9.42866 12.3278 10.1492 11.6582 11.0455 11.6582H12.2658L14.5948 9.75286C14.8778 9.51293 15.3789 9.28641 15.7663 9.28006C16.4721 9.28006 17.1214 9.77333 17.3543 10.5637C17.446 10.896 17.482 11.227 17.5102 11.5453L17.566 11.9962C17.5752 12.0653 17.5836 12.1317 17.5907 12.2022L20.6134 9.18056ZM16.9205 16.1543C17.0158 16.0611 17.229 15.9941 17.3249 16.0188C17.5839 16.0844 17.6348 16.4563 17.6305 16.7485C17.6185 17.5967 17.5903 18.1866 17.5451 18.5514L17.5134 18.8521L17.5128 18.8576C17.4826 19.16 17.4514 19.473 17.3616 19.8068C17.1266 20.5958 16.4964 21.1081 15.78 21.1081C15.7568 21.1081 15.7335 21.1081 15.7095 21.1074C15.3135 21.1074 14.8844 20.8703 14.641 20.6635L13.7736 19.9924C13.444 19.7475 13.5414 19.3566 13.7263 19.1301C13.8644 18.9615 15.524 17.4379 16.3957 16.6378C16.6913 16.3664 16.8962 16.1782 16.9205 16.1543Z"
                     fill="white"
                   />
@@ -228,14 +249,16 @@ export default function Post({
                     fill="black"
                   />
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M15.9047 11.3004C15.8712 10.9761 15.8362 10.6398 15.7502 10.3041C15.5161 9.50102 14.8673 9.00001 14.1718 9.00001C13.7838 8.99857 13.293 9.23763 13.0148 9.47955L10.7086 11.4113H9.5013C8.61279 11.4113 7.89835 12.0963 7.76343 13.0847C7.64878 14.0338 7.62082 15.8252 7.76343 16.8695C7.88716 17.9138 8.56945 18.5887 9.5013 18.5887H10.7086L13.0595 20.5491C13.3007 20.7588 13.7265 20.9993 14.1179 20.9993C14.1431 21 14.1655 21 14.1878 21C14.8967 21 15.521 20.4804 15.7551 19.6795C15.8434 19.3409 15.8743 19.0235 15.9042 18.7168L15.9047 18.7111L15.9362 18.4055C16.0564 17.4142 16.0564 12.5794 15.9362 11.5953L15.9047 11.3004ZM18.6044 11.3297C18.4121 11.0463 18.0311 10.9754 17.7522 11.1723C17.4761 11.3705 17.4076 11.7613 17.5998 12.044C18.1346 12.832 18.4289 13.8813 18.4289 15C18.4289 16.118 18.1346 17.168 17.5998 17.956C17.4076 18.2387 17.4761 18.6295 17.7529 18.8277C17.8564 18.9007 17.9773 18.9394 18.1018 18.9394C18.3024 18.9394 18.4897 18.8385 18.6044 18.6703C19.2797 17.6754 19.6523 16.3721 19.6523 15C19.6523 13.6279 19.2797 12.3246 18.6044 11.3297ZM19.86 9.14737C20.1383 8.94983 20.5207 9.02211 20.7115 9.30483C21.7573 10.8444 22.3333 12.8678 22.3333 14.9999C22.3333 17.1335 21.7573 19.1562 20.7115 20.6957C20.5976 20.8639 20.4095 20.9648 20.2089 20.9648C20.0844 20.9648 19.9642 20.9262 19.8607 20.8532C19.5839 20.6549 19.5154 20.2649 19.7069 19.9814C20.6115 18.6487 21.11 16.8794 21.11 14.9999C21.11 13.1211 20.6115 11.3518 19.7069 10.0191C19.5154 9.73642 19.5839 9.34563 19.86 9.14737Z"
                     fill="white"
                   />
                 </svg>
               </span>
             )}
+
+           { isLoading && <div className="video-loader"></div>}
           </div>
           <div className="post-card-footer">
             <span className="post-btn vote">
