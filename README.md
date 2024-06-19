@@ -33,6 +33,13 @@
     # or
     yarn install
     ```
+3. Set up environment variables:
+
+    Create a `.env` file in the root directory and add the following:
+
+    ```env
+    VITE_BACKEND_BASE_URL=http://localhost:6900
+    ```
 
 ### Running the Development Server
 
