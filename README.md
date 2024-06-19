@@ -45,11 +45,11 @@
 
 To start the development server, run:
 
-    ```bash
-    npm run dev
-    # or
-    yarn dev
-    ```
+```bash
+npm run dev
+# or
+yarn dev
+```
 
 Open your browser and navigate to `http://localhost:5173` to see the application in action.
 
@@ -57,11 +57,11 @@ Open your browser and navigate to `http://localhost:5173` to see the application
 
 To build the project for production, run:
 
-    ```bash
-    npm run build
-    # or
-    yarn build
-    ```
+```bash
+npm run build
+# or
+yarn build
+```
 
 The optimized production build will be in the `dist` directory.
 
@@ -69,11 +69,11 @@ The optimized production build will be in the `dist` directory.
 
 To preview the production build locally, run:
 
-    ```bash
-    npm run preview
-    # or
-    yarn preview
-    ```
+```bash
+npm run preview
+# or
+yarn preview
+```
 
 ## Learn More
 
